@@ -1,0 +1,5 @@
+/*
+shows chat history in grid format with chat title and recent msg short details 
+allows user to click on chat title to open chat in chat window
+allows user to start a new chat with new title
+*/

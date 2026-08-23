@@ -1,0 +1,1 @@
+/*temp token secured routes for otp verification and pass reset flow*/

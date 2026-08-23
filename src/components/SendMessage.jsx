@@ -1,0 +1,1 @@
+/*send message into the chat (can contain attachments, text, etc.)*/

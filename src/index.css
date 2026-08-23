@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+body {
+    margin: 0;
+    padding: 0;
+    @apply bg-slate-950 text-white placeholder:text-slate-400;
+}
