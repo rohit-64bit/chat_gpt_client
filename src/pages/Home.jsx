@@ -7,6 +7,7 @@ allows user to start a new chat with new title
 import { TbPencilPlus } from "react-icons/tb";
 import { CiFolderOn } from "react-icons/ci";
 import React from 'react'
+import ProjectCapsule from "../components/ProjectCapsule";
 
 const NewChat = () => {
   return (
@@ -28,9 +29,8 @@ const ChatCard = ({ title, recentMsg }) => {
         <div className='text-xs text-gray-500 truncate w-full h-full'>{recentMsg}</div>
       </div>
 
-      <div className="w-max flex gap-1 rounded-full bg-white text-black px-1.5 py-0.5 text-xs font-normal">
-        <CiFolderOn fontSize={15} /> Research
-      </div>
+      <ProjectCapsule />
+
     </div>
   )
 
@@ -105,9 +105,9 @@ Mollitia magnam nulla cupiditate aut delectus obcaecati nihil voluptate aliquam 
 Est, unde molestiae delectus incidunt modi velit qui odio tempora voluptas quas ea, consequuntur soluta a! Magni eos quam, asperiores cupiditate rerum, nam facere harum incidunt exercitationem saepe eveniet reiciendis!
 Harum, accusantium? Qui, repellat esse dolore molestiae magni quisquam repudiandae. Saepe, nemo, eligendi alias repellat aliquid voluptatem molestias possimus facilis esse consequatur repellendus voluptatibus, et pariatur repudiandae aspernatur assumenda. Laudantium.
 Maiores officia quibusdam accusantium quia fuga expedita, laborum pariatur blanditiis. Eos dolore saepe nostrum nemo, ratione officiis numquam ut consequuntur sed earum, reprehenderit natus dolor, ea voluptas et distinctio fuga." />
-        
+
         <ChatCard title="Chat 2" recentMsg="This is the recent message for Chat 2" />
-        
+
         <ChatCard title="Chat 3" recentMsg="This is the recent message for Chat 3" />
 
       </div>
