@@ -6,6 +6,12 @@ import Home from './pages/Home'
 import Chat from './pages/Chat'
 import { useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { MainProvider } from './contexts/MainContext'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Toaster } from 'react-hot-toast'
+
+const queryClient = new QueryClient();
 
 const App = () => {
 
@@ -17,12 +23,21 @@ const App = () => {
   }, [localStorage.getItem('clientID')]);
 
   return (
-    <Routes>
-      <Route path="/auth" element={<Auth />} />
-      <Route path="/reset-pass" element={<ResetPass />} />
-      <Route path="/" element={<Home />} />
-      <Route path="/chat/:id" element={<Chat />} />
-    </Routes>
+    <QueryClientProvider client={queryClient}>
+      <MainProvider>
+        <Routes>
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/reset-pass" element={<ResetPass />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/chat/:id" element={<Chat />} />
+        </Routes>
+        <Toaster
+          position="bottom-center"
+          reverseOrder={false}
+        />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </MainProvider>
+    </QueryClientProvider>
   )
 }
 
