@@ -1,6 +1,9 @@
 import { createContext, useContext } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getMyProfile, handleLogin, handleRegister, handleVerify } from "../apis/userApis";
+import { handleCreateProject, handleDeleteProject, handleFetchProjects, handleUpdateProject } from "../apis/projectApis";
+import { handleDeleteChat, handleEditChat, handleFetchChats } from "../apis/chatApis";
+import { useAuthContext } from "./AuthContext";
 
 const MainContext = createContext();
 
@@ -46,7 +49,8 @@ const MainProvider = ({ children }) => {
 
     const getUserData = useQuery({
         queryKey: ['userData'],
-        queryFn: getMyProfile
+        queryFn: getMyProfile,
+        isEnabled: localStorage.getItem('token') ? true : false,
     })
 
     // project api handlers

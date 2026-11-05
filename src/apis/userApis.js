@@ -2,7 +2,7 @@ import { errorHandler, apiOptions } from "../utils/common"
 
 const apiPrefix = "users/"
 
-const handleLogin = async ({ email, password }) => {
+const handleLogin = async({ email, password }) => {
 
     try {
 
