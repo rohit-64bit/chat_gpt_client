@@ -6,11 +6,19 @@ const AuthProvider = ({ children }) => {
 
     const [isAuth, setIsAuth] = useState(false)
 
+    console.log(isAuth)
+
     useEffect(() => {
-        if (localStorage.getItem("token")) {
+
+        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+        if (token) {
             setIsAuth(true)
+        } else {
+            setIsAuth(false)
         }
-    }, [localStorage.getItem("token")])
+
+    }, [typeof window !== "undefined" && localStorage.getItem("token"), isAuth])
 
     return (
         <AuthContext.Provider value={{

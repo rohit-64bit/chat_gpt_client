@@ -10,7 +10,7 @@
 */
 
 import { Button } from '@heroui/react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import onChangeHandler from '../utils/onChangeHandler';
 import { useMainContext } from '../contexts/MainContext';
 import { useParams } from 'react-router-dom';
@@ -29,7 +29,8 @@ const LoginForm = ({ formMode }) => {
 
     return (
         <>
-            <form onSubmit={() => {
+            <form onSubmit={(e) => {
+                e.preventDefault();
                 loginMutation.mutate(formData);
             }} className="auth-form">
 
@@ -68,12 +69,16 @@ const SignUpForm = ({ formMode }) => {
 
 
     return (
-        <form onSubmit={() => {
+        <form onSubmit={(e) => {
+            e.preventDefault();
             if (formData.password !== formData.confirmPassword) {
                 toast.error("Passwords do not match");
                 return;
             }
-            registerMutation.mutate(formData);
+            registerMutation.mutate(formData)
+
+
+
         }} className="auth-form">
             <h2>
                 Sign Up
@@ -97,7 +102,8 @@ const ResetPasswordForm = ({ formMode }) => {
     })
 
     return (
-        <form onSubmit={() => {
+        <form onSubmit={(e) => {
+            e.preventDefault();
             // Handle reset password logic here
         }} className="auth-form">
             <h2>
@@ -123,7 +129,8 @@ const VerifyForm = ({ formMode }) => {
     })
 
     return (
-        <form className="auth-form" onSubmit={() => {
+        <form className="auth-form" onSubmit={(e) => {
+            e.preventDefault();
             verifyMutation.mutate(formData);
         }}>
             <h2>
@@ -140,11 +147,11 @@ const VerifyForm = ({ formMode }) => {
 
 const Auth = () => {
 
-    const {
-        temptoken
-    } = useParams()
+    const [formMode, setFormMode] = useState(typeof window !== "undefined" ? sessionStorage.getItem("redirect") === "auth-verify" ? "verify" : "login" : "login");
 
-    const [formMode, setFormMode] = useState("login")
+    useEffect(() => {
+
+    }, [typeof window !== "undefined" && sessionStorage.getItem("redirect"), typeof window !== "undefined" && sessionStorage.getItem("token")])
 
     return (
         <div className='auth-page'>
@@ -157,7 +164,7 @@ const Auth = () => {
                             <SignUpForm formMode={setFormMode} /> :
                             formMode === "reset" ?
                                 <ResetPasswordForm formMode={setFormMode} /> :
-                                ((formMode === "verify") && temptoken) ?
+                                ((formMode === "verify") && sessionStorage.getItem("token")) ?
                                     <VerifyForm formMode={setFormMode} /> :
                                     <div>Invalid form mode</div>
                 }

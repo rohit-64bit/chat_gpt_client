@@ -2,17 +2,17 @@ import { errorHandler, apiOptions } from "../utils/common"
 
 const apiPrefix = "users/"
 
-const handleLogin = async({ email, password }) => {
+const handleLogin = async ({ email, password }) => {
 
     try {
 
-        const response = await fetch(apiOptions.url(`${apiPrefix}auth/login`), {
+        const res = await fetch(apiOptions.url(`${apiPrefix}auth/login`), {
             method: 'POST',
             headers: apiOptions.headers,
             body: JSON.stringify({ email, password })
         })
 
-        const data = await response.json()
+        const data = await res.json()
 
         if (!res.ok || data.status !== 'success') {
             throw new Error(data.message || 'Login failed')
@@ -58,7 +58,10 @@ const handleVerify = async ({ otp }) => {
 
         const res = await fetch(apiOptions.url(`${apiPrefix}auth/verify`), {
             method: 'POST',
-            headers: apiOptions.headers,
+            headers: {
+                ...apiOptions.headers,
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            },
             body: JSON.stringify({ otp })
         });
 

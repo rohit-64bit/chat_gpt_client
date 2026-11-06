@@ -4,6 +4,8 @@ import { getMyProfile, handleLogin, handleRegister, handleVerify } from "../apis
 import { handleCreateProject, handleDeleteProject, handleFetchProjects, handleUpdateProject } from "../apis/projectApis";
 import { handleDeleteChat, handleEditChat, handleFetchChats } from "../apis/chatApis";
 import { useAuthContext } from "./AuthContext";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const MainContext = createContext();
 
@@ -11,11 +13,18 @@ const MainProvider = ({ children }) => {
 
     // auth and user handlers
 
+    const navigate = useNavigate();
+
+    const { isAuth } = useAuthContext()
+
     const loginMutation = useMutation({
         mutationFn: (data) => handleLogin(data),
         onSettled: (data) => {
             console.log('Login successful:', data);
             // Handle successful login, e.g., store token, redirect, etc.
+            toast.success(data.message);
+            localStorage.setItem("token", data.data.token);
+            navigate("/");
         },
         onError: (error) => {
             console.error('Login failed:', error);
@@ -25,24 +34,33 @@ const MainProvider = ({ children }) => {
 
     const registerMutation = useMutation({
         mutationFn: (data) => handleRegister(data),
-        onSettled: (data) => {
-            console.log('Registration successful:', data);
-            // Handle successful registration, e.g., redirect to login page
+        onSuccess: (data) => {
+
+            toast.success(data.message);
+            sessionStorage.setItem("token", data.data.token);
+            sessionStorage.setItem("redirect", data.data.redirect);
+
         },
         onError: (error) => {
-            console.error('Registration failed:', error);
+
+            toast.error(error.response.data.message);
             // Handle registration error, e.g., show error message to user
         }
     })
 
     const verifyMutation = useMutation({
         mutationFn: (data) => handleVerify(data),
-        onSettled: (data) => {
+        onSuccess: (data) => {
             console.log('Verification successful:', data);
             // Handle successful verification, e.g., redirect to home page
+            localStorage.setItem("token", data.data.token);
+            sessionStorage.clear();
+            navigate("/");
+            toast.success(data.message);
         },
         onError: (error) => {
             console.error('Verification failed:', error);
+            toast.error(error.error);
             // Handle verification error, e.g., show error message to user
         }
     })
@@ -50,7 +68,7 @@ const MainProvider = ({ children }) => {
     const getUserData = useQuery({
         queryKey: ['userData'],
         queryFn: getMyProfile,
-        isEnabled: localStorage.getItem('token') ? true : false,
+        enabled: isAuth
     })
 
     // project api handlers
@@ -69,7 +87,8 @@ const MainProvider = ({ children }) => {
 
     const fetchProjectsQuery = useQuery({
         queryKey: ['projects'],
-        queryFn: handleFetchProjects
+        queryFn: handleFetchProjects,
+        enabled: isAuth
     })
 
     const updateProjectMutation = useMutation({
@@ -114,7 +133,8 @@ const MainProvider = ({ children }) => {
 
     const fetchChatsQuery = useQuery({
         queryKey: ['chats'],
-        queryFn: handleFetchChats
+        queryFn: handleFetchChats,
+        enabled: isAuth
     })
 
     const updateChatMutation = useMutation({
